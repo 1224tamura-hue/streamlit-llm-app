@@ -209,11 +209,15 @@ expert_type = st.radio(
     ],
 )
 
+# テキストエリアのkeyカウンターを初期化
+if "text_area_key" not in st.session_state:
+    st.session_state.text_area_key = 0
+
 user_text = st.text_area(
     "入力フォーム（質問・依頼内容）",
     placeholder="例：職務経歴書の要約文を改善したい / LangChainの基本を手順で教えて",
     height=140,
-    key="user_text",
+    key=f"user_text_{st.session_state.text_area_key}",
 )
 
 # 送信/クリア
@@ -224,7 +228,8 @@ with col2:
     clear_button = st.button("🔄 クリア")
 
 if clear_button:
-    st.session_state["user_text"] = ""
+    # keyを変更することでテキストエリアをリセット
+    st.session_state.text_area_key += 1
     st.rerun()
 
 if submit_button:
